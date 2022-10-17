@@ -8,22 +8,55 @@
     <title>Rock Paper and Scissors</title>
     <style>
         body {
+            height: 100vh;
             background-color: #010d21;
             color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
         }
 
         em {
             color: skyblue;
         }
+
+        .container {
+            min-width: 400px;
+            display: flex;
+            justify-content: space-evenly;
+        }
+
+        button {
+            padding: 5px 10px;
+            border-radius: 8px;
+        }
+
+        .red {
+            color: red;
+        }
+
+        .green {
+            color: green;
+        }
+
+        .white {
+            color: white;
+        }
     </style>
+    <script src="./script.js" defer></script>
 </head>
 
 <body>
     <h1>Rock Paper and Scissors</h1>
-    <h3>To play the game please open the Dev console in the Browser</h3>
-    <h4>You can do <em>CTRL + Shift + i</em> or <em>right click</em> anywhere and click <b>inspect</b> if console is not
-        selected then, select it from the top bar</h4>
-    <script src="./script.js"></script>
+
+    <div class="container">
+        <button>ROCK</button>
+        <button>PAPER</button>
+        <button>SCISSORS</button>
+    </div>
+
 </body>
 
 </html>
