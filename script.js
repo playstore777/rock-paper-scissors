@@ -1,49 +1,40 @@
-function game() {
-    let playerScore = 0;
-    let computerScore = 0;
-    for (let i = 0; i < 5; i++) {
-        let playerSelection = prompt('Please type between Rock, Paper and Scissors: ').toLowerCase();
-        if (playerSelection != 'rock' || playerSelection != 'paper' || playerSelection != 'scissors') {
-            console.log('Please enter a valid option. Valid Options are ROCK, PAPER & SCISSORS')
-            return;
-        }
-        let computerSelection = getComputerChoice();
-        let results = playRound(playerSelection, computerSelection, playerScore, computerScore);
-        playerScore = results.playerScore;
-        computerScore = results.computerScore;
-    }
-
-    return playerScore > computerScore ? "You Win!" : playerScore < computerScore ? "You Lose!" : "It's a tie";
+function Game() {
+    score = playRound(playerSelection, computerSelection, score);
 }
 
-function playRound(playerSelection, computerSelection, playerScore, computerScore) {
-    console.log(playerScore, computerScore);
+function playRound() {
+    // console.log(playerScore, computerScore);
+
     if (playerSelection === 'rock' && computerSelection === 'paper' ||
         playerSelection === 'paper' && computerSelection === 'scissors' ||
         playerSelection === 'scissors' && computerSelection === 'rock') {
         return {
-            computerScore: (computerScore + 1),
-            playerScore: (playerScore)
+            'playerScore': score.playerScore,
+            'computerScore': (score.computerScore + 1)
         };
-        // return `You Lose! ${computerSelection} beats ${playerSelection}`;
     } else if (playerSelection === 'paper' && computerSelection === 'rock' ||
         playerSelection === 'scissors' && computerSelection === 'paper' ||
         playerSelection === 'rock' && computerSelection === 'scissors') {
         return {
-            computerScore: computerScore,
-            playerScore: (playerScore + 1)
+            'playerScore': (score.playerScore + 1),
+            'computerScore': score.computerScore
         }
-        // return `You Win! ${playerSelection} beats ${computerSelection}`;
     }
+
     return {
-        computerScore: (computerScore + 1),
-        playerScore: (playerScore + 1)
+        'playerScore': (score.playerScore + 1),
+        'computerScore': (score.computerScore + 1)
     }
-    // return "It's a tie!";
 }
 
 function getComputerChoice() {
     let x = randomNumberGeneratorBetween(0, 2);
+    /*
+    ***Much smaller version of doing the same is: ***
+
+    let x = Math.random();
+    return (x <= 1/3) ? 'rock' : (x <= 2/3) ? 'paper' : 'scissors';
+    */
     return (x === 0) ? 'rock' : (x === 1) ? 'paper' : 'scissors';
 }
 
@@ -52,4 +43,61 @@ function randomNumberGeneratorBetween(min, max) {
     return Math.round(random * (max - min)) + min;
 }
 
-console.log(game());
+function resultGenerator() {
+    if (score.playerScore === 5 && score.computerScore === 5) {
+        score = {
+            'playerScore': 0,
+            'computerScore': 0
+        }
+        return "It's a tie!";
+    } else if (score.playerScore === 5) {
+        score = {
+            'playerScore': 0,
+            'computerScore': 0
+        }
+        return 'You Win!';
+    } else if (score.computerScore === 5) {
+        score = {
+            'playerScore': 0,
+            'computerScore': 0
+        }
+        return 'You Lose!';
+    }
+}
+
+let playerSelection = "";
+let computerSelection = getComputerChoice();
+let score = {
+    'playerScore': 0,
+    'computerScore': 0,
+};
+
+// DOM part
+let body = document.querySelector('body');
+const buttons = document.querySelectorAll('button');
+let resultDiv = document.createElement('div');
+let scoreDiv = document.createElement('div');
+
+buttons.forEach(button =>
+    button.addEventListener('click', function (e) {
+        playerSelection = this.textContent.toLowerCase();
+        Game();
+        let results = resultGenerator() || '***whoever gets 5 score first Wins!***';
+        resultDiv.innerHTML = "Result is: " + `<b>${results}</b>`;
+        let colorClass = results === "You Win!" ? 'green' : results === "You Lose!" ? 'red' : 'white';
+        resultDiv.classList.add(colorClass);
+        scoreDiv.textContent = `Player: ${score.playerScore} | Computer: ${score.computerScore}`;
+    }
+    )
+)
+
+// Insert into DOM
+body.insertBefore(scoreDiv, document.querySelector('h1'));
+body.append(resultDiv);
+
+/***
+ * Things to be done:
+ * Need to replace buttons with Rock, Paper and Scissors images.
+ * also add some hover animation, like scaling size or rotating etc.
+ * Maybe add some cool audio or effects!
+ */
